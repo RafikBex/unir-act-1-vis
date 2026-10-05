@@ -52,7 +52,7 @@ function grafica1(registros) {
     .append("text")
     .attr("x", 20)
     .attr("y", 28)
-    .attr("font-size", 18)
+    .attr("font-size", 12)
     .attr("font-weight", "bold")
     .text("Encuestados por sexo");
 
@@ -60,7 +60,7 @@ function grafica1(registros) {
     .append("text")
     .attr("x", 20)
     .attr("y", 50)
-    .attr("font-size", 13)
+    .attr("font-size", 8)
     .text(`Total de registros: ${resumen.total}`);
 
   // Dibuja una fila con una barra para cada sexo.

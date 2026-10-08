@@ -7,6 +7,8 @@ async function cargarDatos() {
     );
     grafica1(registros);
     grafica2(registros, "Hombre");
+    grafica3(registros,"Hombre")
+    prepararygrafica4(registros, "Hombre");
   } catch (error) {
     console.error("No se pudieron cargar los datos de las gráficas.", error);
     d3.select("#grafica1").text("No se pudieron cargar los datos.");

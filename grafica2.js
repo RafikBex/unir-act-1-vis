@@ -82,30 +82,19 @@ function grafica2(registros, sexo) {
   barras
     .append("rect")
     .attr("x", (dato) => escalaX(dato.edad))
-    .attr("y", escalaY(0))
-    .attr("width", escalaX.bandwidth())
-    .attr("height", 0)
-    .attr("rx", 5)
-    .attr("fill", (dato) => dato.color)
-    .transition()
-    .duration(800)
-    .delay((dato, indice) => indice * 120)
-    .ease(d3.easeCubicOut)
     .attr("y", (dato) => escalaY(dato.cantidad))
-    .attr("height", (dato) => escalaY(0) - escalaY(dato.cantidad));
+    .attr("width", escalaX.bandwidth())
+    .attr("height", (dato) => escalaY(0) - escalaY(dato.cantidad))
+    .attr("rx", 5)
+    .attr("fill", (dato) => dato.color);
 
   barras
     .append("text")
     .attr("x", (dato) => escalaX(dato.edad) + escalaX.bandwidth() / 2)
-    .attr("y", escalaY(0) - 8)
+    .attr("y", (dato) => escalaY(dato.cantidad) - 8)
     .attr("text-anchor", "middle")
     .attr("font-size", 13)
     .attr("font-weight", "bold")
     .attr("fill", "#374151")
-    .text((dato) => dato.cantidad)
-    .transition()
-    .duration(800)
-    .delay((dato, indice) => indice * 120)
-    .ease(d3.easeCubicOut)
-    .attr("y", (dato) => escalaY(dato.cantidad) - 8);
+    .text((dato) => dato.cantidad);
 }

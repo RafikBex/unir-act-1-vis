@@ -74,7 +74,14 @@ function grafica1(registros) {
     .attr("aria-label", (dato) => `Ver detalle de ${dato.etiqueta.toLowerCase()}`)
     .style("cursor", "pointer")
     // Al seleccionar una barra, actualiza el detalle por sexo.
-    .on("click", (_evento, dato) => grafica2(registros, dato.sexo))
+    .on("click", (_evento, dato) => {// 1. Primera función de gráfico
+  grafica2(registros, dato.sexo);
+  // 2. Segunda función de gráfico (puedes pasarle 'registros', 'dato' o los parámetros necesarios)
+  grafica3(registros, dato.sexo);
+  prepararygrafica4(registros, dato.sexo);
+
+})
+
 
   filas
     .append("text")

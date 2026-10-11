@@ -28,18 +28,18 @@ function grafica3(registros, sexo) {
     ).length,
     color: coloresmes[indice],
   }));
-  const ancho = 720;
-  const alto = 420;
-  const margen = { arriba: 75, derecha: 25, abajo: 65, izquierda: 60 };
+  const contenedor = d3.select("#grafica3");
+  const ancho = contenedor.node().clientWidth;
+  const alto = 500;
+  const margen = { arriba: 60, derecha: 15, abajo: 65, izquierda: 15 };
   const anchoGrafica = ancho - margen.izquierda - margen.derecha;
   const altoGrafica = alto - margen.arriba - margen.abajo;
   const nombreSexo = sexo === "Mujer" ? "Mujeres" : "Hombres";
-  const contenedor = d3.select("#grafica3");
 
   // Limpia la gráfica anterior antes de dibujar la nueva.
   contenedor.selectAll("*").remove();
 
-  // Crea el SVG con título y total de registros.
+  // Crea el SVG con título
   const svg = contenedor
     .append("svg")
     .attr("viewBox", `0 0 ${ancho} ${alto}`)
@@ -49,23 +49,16 @@ function grafica3(registros, sexo) {
       `Cantidad de visitas por mes ${nombreSexo.toLowerCase()}`
     )
     .style("width", "100%")
-    .style("height", "100%");
+    .style("height", `${alto}px`)
+    .style("display", "block");
 
   svg
     .append("text")
     .attr("x", margen.izquierda)
     .attr("y", 34)
-    .attr("font-size", 18)
+    .attr("font-size", 20)
     .attr("font-weight", "bold")
-    .text(`Visitas por mes : ${nombreSexo}`);
-
-  svg
-    .append("text")
-    .attr("x", margen.izquierda)
-    .attr("y", 56)
-    .attr("font-size", 12)
-    .attr("fill", "#6b7280")
-    .text(`${registrosFiltrados.length} registros`);
+    .text("Visitas por mes");
 
   // Ubica las edades en horizontal y convierte cantidades en alturas.
   const escalaX = d3
@@ -85,7 +78,7 @@ function grafica3(registros, sexo) {
     .attr("transform", `translate(0, ${alto - margen.abajo})`)
     .call(d3.axisBottom(escalaX))
     .call((eje) => eje.select(".domain").attr("stroke", "#9ca3af"))
-    .call((eje) => eje.selectAll(".tick text").attr("fill", "#4b5563"));
+    .call((eje) => eje.selectAll(".tick text").attr("fill", "#4b5563").attr("font-size", 12));
 
   const barras = svg
     .selectAll(".barra-edad")
@@ -108,7 +101,7 @@ function grafica3(registros, sexo) {
     .attr("x", (dato) => escalaX(dato.mes) + escalaX.bandwidth() / 2)
     .attr("y", (dato) => escalaY(dato.cantidad) - 8)
     .attr("text-anchor", "middle")
-    .attr("font-size", 13)
+    .attr("font-size", 12)
     .attr("font-weight", "bold")
     .attr("fill", "#374151")
     .text((dato) => dato.cantidad);

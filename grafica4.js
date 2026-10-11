@@ -60,7 +60,7 @@ function grafica4(registros, sexo) {
   }
 
   // 1. Dimensiones de lienzo interno
-  const ancho = 800;
+  const ancho = contenedor.node().clientWidth;
   const alto = 500;
   
   // Márgenes optimizados para evitar cortes
@@ -68,15 +68,13 @@ function grafica4(registros, sexo) {
   const anchoGrafica = ancho - margen.izquierda - margen.derecha;
   const altoGrafica = alto - margen.arriba - margen.abajo;
 
-  const nombreSexo = sexo === "Mujer" ? "Mujeres" : "Hombres";
-
   // 2. Creación de SVG Escalable con viewBox
   const svg = contenedor
     .append("svg")
     .attr("viewBox", `0 0 ${ancho} ${alto}`)
     .attr("preserveAspectRatio", "xMidYMid meet")
     .style("width", "100%")
-    .style("height", "100%")
+    .style("height", `${alto}px`)
     .style("display", "block")
     .append("g")
     .attr("transform", `translate(${margen.izquierda},${margen.arriba})`);
@@ -126,47 +124,61 @@ function grafica4(registros, sexo) {
   }
 
   // Cuadrícula de fondo
-  svg.append("g")
+  const cuadricula = svg.append("g")
     .attr("class", "grid")
     .attr("transform", `translate(0,${altoGrafica})`)
     .call(d3.axisBottom(escala_x)
       .ticks(6)
       .tickSize(-altoGrafica)
       .tickFormat("")
-    )
-    .selectAll("line")
+    );
+
+  cuadricula
+    .selectAll(".tick")
+    .filter((_dato, indice, marcas) => indice === marcas.length - 1)
+    .select("line")
+    .remove();
+
+  cuadricula.selectAll("line")
     .style("stroke", "#e2e8f0")
     .style("stroke-dasharray", "3,3");
 
   // Eje Y (Servicios)
-  svg.append("g")
+  const ejeY = svg.append("g")
     .attr("class", "y-axis")
-    .call(d3.axisLeft(escala_y))
-    .selectAll("text")
-    .style("font-size", "10px");
+    .call(d3.axisLeft(escala_y));
+
+  ejeY.select(".domain").attr("stroke", "#6b7280");
+  ejeY.selectAll(".tick line").attr("stroke", "#6b7280");
+  ejeY.selectAll(".tick text")
+    .attr("fill", "#4b5563")
+    .style("font-size", "12px");
 
   // Eje X (Cantidad)
   svg.append("g")
     .attr("class", "x-axis")
     .attr("transform", `translate(0,${altoGrafica})`)
     .call(d3.axisBottom(escala_x).ticks(6))
+    .call((eje) => eje.select(".domain").attr("stroke", "#6b7280"))
+    .call((eje) => eje.selectAll(".tick line").attr("stroke", "#6b7280"))
+    .call((eje) => eje.selectAll(".tick text").attr("fill", "#4b5563").style("font-size", "12px"))
     .append("text")
       .attr("x", anchoGrafica / 2)
       .attr("y", 38)
       .attr("fill", "#1e293b")
       .attr("text-anchor", "middle")
-      .style("font-size", "11px")
+      .style("font-size", "12px")
       .style("font-weight", "bold")
       .text("Cantidad de visitantes");
 
   // Título principal
   svg.append("text")
-    .attr("x", anchoGrafica / 2)
+    .attr("x", 20 - margen.izquierda)
     .attr("y", -20)
-    .attr("text-anchor", "middle")
-    .style("font-size", "14px")
+    .attr("text-anchor", "start")
+    .style("font-size", "20px")
     .style("font-weight", "bold")
-    .text(`Nivel de Satisfacción por Instalación Turística (${nombreSexo})`);
+    .text("Nivel de Satisfacción por Instalación Turística");
 
   // Dibujar barras agrupadas
   const grupos = svg.append("g")
@@ -221,7 +233,7 @@ function grafica4(registros, sexo) {
   leyenda.append("text")
     .attr("x", 0)
     .attr("y", -5)
-    .style("font-size", "11px")
+    .style("font-size", "12px")
     .style("font-weight", "bold")
     .style("fill", "#334155")
     .text("Nivel satisfacción:");
@@ -239,7 +251,7 @@ function grafica4(registros, sexo) {
     fila.append("text")
       .attr("x", 18)
       .attr("y", 10)
-      .style("font-size", "10px")
+      .style("font-size", "12px")
       .style("fill", "#475569")
       .text(`Puntuación ${nivel}`);
   });

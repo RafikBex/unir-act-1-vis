@@ -3,6 +3,8 @@ const gruposEdad = ["15-24", "25-44", "45-64", "+65"];
 const coloresEdad = ["#a8dadc", "#cdb4db", "#ffd6a5", "#bde0a8"];
 
 function grafica2(registros, sexo) {
+  const contenedor = d3.select("#grafica2");
+  
   // Filtra por sexo y cuenta los registros de cada grupo de edad.
   const registrosFiltrados = registros.filter(
     (registro) => registro.Sexo === sexo
@@ -13,18 +15,18 @@ function grafica2(registros, sexo) {
       .length,
     color: coloresEdad[indice],
   }));
-  const ancho = 720;
-  const alto = 420;
-  const margen = { arriba: 75, derecha: 25, abajo: 65, izquierda: 60 };
+  const ancho = contenedor.node().clientWidth;
+  const alto = 500;
+  const margen = { arriba: 60, derecha: 15, abajo: 65, izquierda: 15 };
   const anchoGrafica = ancho - margen.izquierda - margen.derecha;
   const altoGrafica = alto - margen.arriba - margen.abajo;
   const nombreSexo = sexo === "Mujer" ? "Mujeres" : "Hombres";
-  const contenedor = d3.select("#grafica2");
+  
 
   // Limpia la gráfica anterior antes de dibujar la nueva.
   contenedor.selectAll("*").remove();
 
-  // Crea el SVG con título y total de registros.
+  // Crea el SVG con título
   const svg = contenedor
     .append("svg")
     .attr("viewBox", `0 0 ${ancho} ${alto}`)
@@ -34,23 +36,16 @@ function grafica2(registros, sexo) {
       `Cantidad de registros por edad para ${nombreSexo.toLowerCase()}`
     )
     .style("width", "100%")
-    .style("height", "100%");
+    .style("height", `${alto}px`)
+    .style("display", "block");
 
   svg
     .append("text")
     .attr("x", margen.izquierda)
     .attr("y", 34)
-    .attr("font-size", 18)
+    .attr("font-size", 20)
     .attr("font-weight", "bold")
-    .text(`Distribución por edad: ${nombreSexo}`);
-
-  svg
-    .append("text")
-    .attr("x", margen.izquierda)
-    .attr("y", 56)
-    .attr("font-size", 12)
-    .attr("fill", "#6b7280")
-    .text(`${registrosFiltrados.length} registros`);
+    .text("Distribución por edad");
 
   // Ubica las edades en horizontal y convierte cantidades en alturas.
   const escalaX = d3
@@ -70,7 +65,7 @@ function grafica2(registros, sexo) {
     .attr("transform", `translate(0, ${alto - margen.abajo})`)
     .call(d3.axisBottom(escalaX))
     .call((eje) => eje.select(".domain").attr("stroke", "#9ca3af"))
-    .call((eje) => eje.selectAll(".tick text").attr("fill", "#4b5563"));
+    .call((eje) => eje.selectAll(".tick text").attr("fill", "#4b5563").attr("font-size", 12));
 
   const barras = svg
     .selectAll(".barra-edad")
@@ -82,30 +77,19 @@ function grafica2(registros, sexo) {
   barras
     .append("rect")
     .attr("x", (dato) => escalaX(dato.edad))
-    .attr("y", escalaY(0))
-    .attr("width", escalaX.bandwidth())
-    .attr("height", 0)
-    .attr("rx", 5)
-    .attr("fill", (dato) => dato.color)
-    .transition()
-    .duration(800)
-    .delay((dato, indice) => indice * 120)
-    .ease(d3.easeCubicOut)
     .attr("y", (dato) => escalaY(dato.cantidad))
-    .attr("height", (dato) => escalaY(0) - escalaY(dato.cantidad));
+    .attr("width", escalaX.bandwidth())
+    .attr("height", (dato) => escalaY(0) - escalaY(dato.cantidad))
+    .attr("rx", 5)
+    .attr("fill", (dato) => dato.color);
 
   barras
     .append("text")
     .attr("x", (dato) => escalaX(dato.edad) + escalaX.bandwidth() / 2)
-    .attr("y", escalaY(0) - 8)
+    .attr("y", (dato) => escalaY(dato.cantidad) - 8)
     .attr("text-anchor", "middle")
-    .attr("font-size", 13)
+    .attr("font-size", 12)
     .attr("font-weight", "bold")
     .attr("fill", "#374151")
-    .text((dato) => dato.cantidad)
-    .transition()
-    .duration(800)
-    .delay((dato, indice) => indice * 120)
-    .ease(d3.easeCubicOut)
-    .attr("y", (dato) => escalaY(dato.cantidad) - 8);
+    .text((dato) => dato.cantidad);
 }

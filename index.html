@@ -3,19 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
     <title>Actividad 1 (grupal)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7" defer></script>
     <script src="grafica1.js" defer></script>
     <script src="grafica2.js" defer></script>
+    <script src="grafica3.js" defer></script>
+    <script src="grafica4.js" defer></script>
+    <script src="grafica5.js" defer></script>
     <script src="main.js" defer></script>
   </head>
-  <body class="h-screen bg-gray-100 p-[100px]">
-    <div class="grid h-full w-full grid-cols-2 grid-rows-2 gap-4">
-      <div id="grafica1" class="rounded border border-gray-300 bg-white"></div>
-      <div id="grafica2" class="rounded border border-gray-300 bg-white"></div>
-      <div id="grafica3" class="rounded border border-gray-300 bg-white"></div>
-      <div id="grafica4" class="rounded border border-gray-300 bg-white"></div>
+  <body class="h-screen bg-gray-100 p-4 md:p-8 xl:p-[100px]">
+    <h1 class="negrita tamano_200">Satisfacción de visitantes</h1>
+    <div class="grid h-fit w-full mb-4">
+      <div id="grafica1" class="w-full min-w-0 rounded border border-gray-300 bg-white"></div>
+    </div>
+    <div id="graficasDetalle" class="hidden grid h-fit w-full grid-cols-2 grid-rows-2 gap-4 xl:grid-cols-2">
+      <div id="grafica2" class="min-w-0 rounded border border-gray-300 bg-white"></div>
+      <div id="grafica3" class="min-w-0 rounded border border-gray-300 bg-white"></div>
+      <div id="grafica4" class="min-w-0 rounded border border-gray-300 bg-white"></div>
+      <div id="grafica5" class="w-full min-w-0 rounded border border-gray-300 bg-white"></div>
     </div>
   </body>
 </html>
